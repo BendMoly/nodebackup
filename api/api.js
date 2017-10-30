@@ -11,6 +11,8 @@ const checkUser = require('./user');
 const article = require('./article.js');
 // 引入评论接口
 const review = require('./review.js');
+// 引入目录接口
+const updateCatalog = require('./catalogs');
 
 // 文章列表接口
 api.post('/articleList', function(req, res){
@@ -58,6 +60,19 @@ api.post('/login', (req, res) => {
   },
   err => {
     console.log(err);
+  })
+})
+
+api.post('/catalogs', (req, res) => {
+  console.log('请求目录');
+  updateCatalog().then(val => {
+    let result = {
+      code: '40001',
+      msg: '请求成功',
+      data: val
+    }
+    res.status(200);
+    res.json(result);
   })
 })
 

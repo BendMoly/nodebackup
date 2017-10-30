@@ -1,6 +1,13 @@
 const db = require('../db');
 const dateFormate = require('../utils/dateFormate');
 
+/**
+ * 根据时间段来进行数据库查询
+ * @param  {string} pastTime    [过去时间点]
+ * @param  {string} newTime     [当前时间点]
+ * @param  {string} currentPage [当前页码]
+ * @return {object}             [返回一个promise对象]
+ */
 module.exports = function timeSearch(pastTime, newTime, currentPage){
   console.log(pastTime, newTime, currentPage);
   return new Promise((resolve, reject) => {

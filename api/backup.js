@@ -5,6 +5,16 @@ const api = express.Router();
 const articleList = require('./backup_articleList');
 // 文章列表时间段查询
 const timeSearch = require('./backup_articleTimeSearch');
+// 后台目录查询
+const checkCatalogs = require('./backup_catalogs');
+// 后台栏目查询
+const checkColumns = require('./backup_columns');
+// 后台标签查询
+const checkTags = require('./backup_tags');
+// 新标签存储插入
+const updateTags = require('./backup_updateTag');
+// 文章发布数据插入
+const release = require('./backup_release');
 
 // 仅限后端接口需要做session权限控制
 // api.use('/', (req, res, next) => {
@@ -51,6 +61,81 @@ api.post('/articleListTimeSearch', (req, res) => {
     }
     res.status(200);
     res.json(result);
+  })
+})
+
+api.post('/checkCatalogs', (req, res) => {
+  console.log('请求到后台目录');
+  checkCatalogs().then(val => {
+    res.status(200);
+    res.json(val);
+  })
+})
+
+api.post('/checkColumns', (req, res) => {
+  checkColumns(req.body.column).then(val => {
+    let result = {
+      code: '40001',
+      msg: '请求成功',
+      data: val
+    }
+    res.status(200);
+    res.json(result);
+  })
+})
+
+api.post('/checkTags', (req, res) => {
+  checkTags(req.body.tag).then(val => {
+    let result = {
+      code: '40001',
+      msg: '请求成功',
+      data: val
+    }
+    res.status(200);
+    res.json(result);
+  })
+})
+
+api.post('/updateTags', (req, res) => {
+  console.log(req.body.column, req.body.tags);
+  updateTags(req.body.column, req.body.tags).then(val => {
+    if (val) {
+      let result = {
+        code: '40001',
+        msg: '请求成功'
+      };
+      res.status(200);
+      res.json(result);
+    }
+  },
+  err => {
+    let result = {
+      code: '40001',
+      msg: '请求成功,无新标签更新'
+    };
+    res.status(200);
+    res.json(result);
+  })
+})
+
+api.post('/release', (req, res) => {
+  let reqJson = {
+    title: req.body.title,
+    column: req.body.column,
+    summary: req.body.summary,
+    content: req.body.content,
+    tags: req.body.tags
+  }
+  console.log(reqJson);
+  release(reqJson).then(val => {
+    if (val) {
+      let result = {
+        code: '40001',
+        msg: '请求成功'
+      }
+      res.status(200);
+      res.json(result);
+    }
   })
 })
 
